@@ -23,19 +23,20 @@ import com.orhanobut.logger.Logger
 class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(
     R.layout.fragment_bookmark
 ) {
-    private val activityResultLauncher: ActivityResultLauncher<ProductDetailContractData> = registerForActivityResult(
-        ProductDetailActivityContract()
-    ) { result: ProductDetailContractData? ->
-        Logger.d("activity result >>> $result")
-        //북마크 리스트 갱신처리
-        binding.bookmarkViewModel?.lastRequestSortType?.let { selectAllBookmarkList(it) }
-        result?.productModel?.let {
-            binding.bookmarkViewModel?.isBookmarkCanceled(
-                binding.root.context,
-                it
-            )
+    private val activityResultLauncher: ActivityResultLauncher<ProductDetailContractData> =
+        registerForActivityResult(
+            ProductDetailActivityContract()
+        ) { result: ProductDetailContractData? ->
+            Logger.d("activity result >>> $result")
+            //북마크 리스트 갱신처리
+            binding.bookmarkViewModel?.lastRequestSortType?.let { selectAllBookmarkList(it) }
+            result?.productModel?.let {
+                binding.bookmarkViewModel?.isBookmarkCanceled(
+                    binding.root.context,
+                    it
+                )
+            }
         }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,13 +50,15 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(
 
     @Suppress("UNCHECKED_CAST")
     private fun initViewModel() {
-        binding.bookmarkViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return BookmarkViewModel(
-                    BookmarkRepository(BookmarkDataSource())
-                ) as T
-            }
-        }).get(BookmarkViewModel::class.java)
+        binding.bookmarkViewModel = ViewModelProvider(
+            this,
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                    return BookmarkViewModel(
+                        BookmarkRepository(BookmarkDataSource())
+                    ) as T
+                }
+            }).get(BookmarkViewModel::class.java)
 
         binding.bookmarkEventViewModel = activity?.let {
             ViewModelProvider(it).get(BookmarkEventViewModel::class.java)
@@ -67,29 +70,34 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(
     private fun iniViewModelObserve() {
 
         //DB 리스트 조회 성공
-        binding.bookmarkViewModel?.bookmarkListData?.observe(viewLifecycleOwner, Observer {
-            Logger.d("bookmarkViewModel observe listData $it")
-            if (it.isNotEmpty()) {
-                binding.rvBookmark.visibility = View.VISIBLE
-                binding.tvEmptyList.visibility = View.GONE
+        binding.bookmarkViewModel?.bookmarkListData?.observe(
+            viewLifecycleOwner,
+            Observer {
+                Logger.d("bookmarkViewModel observe listData $it")
+                if (it.isNotEmpty()) {
+                    binding.rvBookmark.visibility = View.VISIBLE
+                    binding.tvEmptyList.visibility = View.GONE
 
-            } else {
-                binding.rvBookmark.visibility = View.GONE
-                binding.tvEmptyList.visibility = View.VISIBLE
-            }
+                } else {
+                    binding.rvBookmark.visibility = View.GONE
+                    binding.tvEmptyList.visibility = View.VISIBLE
+                }
 
-        })
+            })
 
         //DB 리스트 조회 실패
-        binding.bookmarkViewModel?.errorMessage?.observe(viewLifecycleOwner, Observer {
-            Logger.d("bookmarkViewModel observe errorMessage $it")
-            context?.let { showToast(it, getString(R.string.common_toast_msg_network_error)) }
-        })
+        binding.bookmarkViewModel?.errorMessage?.observe(
+            viewLifecycleOwner,
+            Observer {
+                context?.let { showToast(it, getString(R.string.common_toast_msg_network_error)) }
+            })
 
-        binding.bookmarkViewModel?.sortType?.observe(viewLifecycleOwner, Observer {
-            Logger.d("bookmarkViewModel observe sortType $it")
-            selectAllBookmarkList(it)
-        })
+        binding.bookmarkViewModel?.sortType?.observe(
+            viewLifecycleOwner,
+            Observer {
+                Logger.d("bookmarkViewModel observe sortType $it")
+                selectAllBookmarkList(it)
+            })
 
         //즐겨찾기 삭제
         binding.bookmarkViewModel?.removeBookmarkModel?.observe(
@@ -106,13 +114,21 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(
             })
 
         //상세화면에서 북마크 체크여부
-        binding.bookmarkViewModel?.existsProductModel?.observe(viewLifecycleOwner, Observer {
-            binding.bookmarkEventViewModel?.deletedObserveBookmark(it)
-        })
+        binding.bookmarkViewModel?.existsProductModel?.observe(viewLifecycleOwner,
+            Observer {
+                binding.bookmarkEventViewModel?.deletedObserveBookmark(it)
+            })
 
-        binding.bookmarkViewModel?.productItemSelected?.observe(viewLifecycleOwner, Observer {
-            activityResultLauncher.launch(ProductDetailContractData(it.position, it.productModel))
-        })
+        binding.bookmarkViewModel?.productItemSelected?.observe(
+            viewLifecycleOwner,
+            Observer {
+                activityResultLauncher.launch(
+                    ProductDetailContractData(
+                        it.position,
+                        it.productModel
+                    )
+                )
+            })
     }
 
     private fun initLayout() {
