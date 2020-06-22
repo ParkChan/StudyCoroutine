@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ExamSample</string>
+    <string name="app_name">StudyBaseCode</string>
     <string name="title_home">Home</string>
     <string name="title_bookmark">BookMark</string>
     <string name="bookmark_sort_reg_date_desc">등록일↑</string>

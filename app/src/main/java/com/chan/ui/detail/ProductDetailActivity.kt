@@ -11,7 +11,6 @@ import com.chan.common.base.BaseActivity
 import com.chan.databinding.ActivityProductDetailBinding
 import com.chan.ui.bookmark.local.BookmarkDataSource
 import com.chan.ui.bookmark.repository.BookmarkRepository
-import com.google.gson.Gson
 
 /**
  * 상품 상세화면
@@ -22,11 +21,12 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val productModelStr =
-            intent.getStringExtra(ProductDetailActivityContract.EXTRA_PRODUCT_DATA_KEY)
-        val data: ProductDetailContractData =
-            Gson().fromJson(productModelStr, ProductDetailContractData::class.java)
-        binding.setVariable(BR.productModel, data.productModel)
+        intent.getParcelableExtra<ProductDetailContractData>(
+            ProductDetailActivityContract.EXTRA_PRODUCT_DATA_KEY
+        )?.let {
+            binding.setVariable(BR.productModel, it.productModel)
+        }
+
         initViewModel()
         initLayoutComponent()
 
@@ -57,17 +57,18 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>(
 
     override fun onBackPressed() {
 
-        val productModelStr =
-            intent.getStringExtra(ProductDetailActivityContract.EXTRA_PRODUCT_DATA_KEY)
-
-        setResult(
-            Activity.RESULT_OK,
-            Intent().apply {
-                putExtra(
-                    ProductDetailActivityContract.EXTRA_PRODUCT_DATA_KEY,
-                    productModelStr
-                )
-            })
-        finish()
+        intent.getParcelableExtra<ProductDetailContractData>(
+            ProductDetailActivityContract.EXTRA_PRODUCT_DATA_KEY
+        )?.let {
+            setResult(
+                Activity.RESULT_OK,
+                Intent().apply {
+                    putExtra(
+                        ProductDetailActivityContract.EXTRA_PRODUCT_DATA_KEY,
+                        it
+                    )
+                })
+            finish()
+        }
     }
 }

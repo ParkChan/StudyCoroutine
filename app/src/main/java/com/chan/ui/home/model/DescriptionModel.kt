@@ -1,7 +1,10 @@
 package com.chan.ui.home.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class DescriptionModel(
 
     @SerializedName("imagePath")
@@ -13,4 +16,4 @@ data class DescriptionModel(
     @SerializedName("price")
     val price: Int
 
-)
+) : Parcelable

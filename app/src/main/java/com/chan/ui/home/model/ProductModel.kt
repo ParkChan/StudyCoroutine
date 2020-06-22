@@ -1,7 +1,10 @@
 package com.chan.ui.home.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class ProductModel(
 
     @SerializedName("id")
@@ -18,4 +21,4 @@ data class ProductModel(
 
     @SerializedName("rate")
     val rate: Float
-)
+) : Parcelable

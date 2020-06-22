@@ -46,16 +46,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
 
     @Suppress("UNCHECKED_CAST")
     private fun initViewModel() {
-        binding.homeViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                return HomeViewModel(
-                    GoodChoiceRepository(
-                        SearchProductRemoteDataSource(GoodChoiceApi.create())
-                    ),
-                    BookmarkRepository(BookmarkDataSource())
-                ) as T
-            }
-        }).get(HomeViewModel::class.java)
+        binding.homeViewModel = ViewModelProvider(
+            this,
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                    return HomeViewModel(
+                        GoodChoiceRepository(
+                            SearchProductRemoteDataSource(GoodChoiceApi.create())
+                        ),
+                        BookmarkRepository(BookmarkDataSource())
+                    ) as T
+                }
+            }).get(HomeViewModel::class.java)
 
         binding.rvProduct.adapter = ProductListAdapter(binding.homeViewModel as HomeViewModel)
     }
