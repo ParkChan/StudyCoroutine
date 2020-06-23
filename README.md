@@ -13,7 +13,7 @@
   - Retrofit
 
 - Asynchronous
-  - Rxjava
+  - Coroutine
 
 ### 구현 내용
 API 정보를 이용하여, 화면을 구성

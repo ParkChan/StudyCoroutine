@@ -1,2 +1,2 @@
-rootProject.name='StudyBaseCode'
+rootProject.name='StudyCoroutine'
 include ':app'
