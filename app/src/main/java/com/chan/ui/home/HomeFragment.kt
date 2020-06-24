@@ -103,7 +103,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     private fun requestFistPage() {
-        binding.homeViewModel?.requestFirst()
+        binding.homeViewModel?.requestListData(true)
     }
 
     fun listUpdate(model: ProductModel) {

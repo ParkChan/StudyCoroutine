@@ -48,6 +48,7 @@ class BookmarkViewModel(
                 _errorMessage.postValue(it)
             }
         ))
+
     }
 
     fun sendRemoveBookmarkData(model: BookmarkModel) {

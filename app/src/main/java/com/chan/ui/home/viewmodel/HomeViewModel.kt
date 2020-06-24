@@ -3,13 +3,14 @@ package com.chan.ui.home.viewmodel
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.chan.common.base.BaseViewModel
 import com.chan.network.NETWORK_ROW_COUNT
 import com.chan.ui.bookmark.repository.BookmarkRepository
 import com.chan.ui.detail.ProductDetailContractData
 import com.chan.ui.home.model.ProductModel
 import com.chan.ui.home.repository.GoodChoiceRepository
-import com.orhanobut.logger.Logger
+import kotlinx.coroutines.isActive
 
 class HomeViewModel(
     private val goodChoiceRepository: GoodChoiceRepository,
@@ -34,57 +35,39 @@ class HomeViewModel(
 
 
     fun listScrolled(visibleItemCount: Int, fistVisibleItem: Int, totalItemCount: Int) {
-        if (visibleItemCount + fistVisibleItem >= totalItemCount) {
-            if (isProgress || requestePage > totalPage) {
-                return
+        if (viewModelScope.isActive) {
+            if (visibleItemCount + fistVisibleItem >= totalItemCount) {
+                if (!isProgress && requestePage <= totalPage) {
+                    requestListData(false)
+                }
             }
-            requestNext()
         }
     }
 
-    fun requestFirst() {
-        initPageInfo()
+    fun requestListData(isFirstPage: Boolean) {
+        if (isFirstPage) {
+            initPageInfo()
+        }
         isProgress = true
         compositeDisposable.add(
             goodChoiceRepository.requestData(
                 defaultStartPageNumber,
                 onSuccess = {
-
-                    _productListData.value = it.data.productList
-
-                    val totalCount = it.data.totalCount
-                    totalPage = if (totalCount / NETWORK_ROW_COUNT > 0) {
-                        (totalCount / NETWORK_ROW_COUNT) + 1
-                    } else {
-                        defaultTotalPageCnt
+                    if (isFirstPage) {
+                        val totalCount = it.data.totalCount
+                        totalPage = if (totalCount / NETWORK_ROW_COUNT > 0) {
+                            (totalCount / NETWORK_ROW_COUNT) + 1
+                        } else {
+                            defaultTotalPageCnt
+                        }
                     }
-                    requestePage++
-                    isProgress = false
-                },
-                onFail = {
-                    _errorMessage.value = it
-                    isProgress = false
-                }
-            )
-        )
-    }
-
-    private fun requestNext() {
-        isProgress = true
-        //Logger.d("now Page >>> $requestedPage total Page >>> $totalPage")
-        compositeDisposable.add(
-            goodChoiceRepository.requestData(
-                requestePage,
-                onSuccess = {
                     _productListData.value = it.data.productList
                     requestePage++
                     isProgress = false
-                    Logger.d("requestNext >>> onSuccess $isProgress")
                 },
                 onFail = {
                     _errorMessage.value = it
                     isProgress = false
-                    Logger.d("requestNext >>>  $isProgress")
                 }
             )
         )
@@ -100,36 +83,39 @@ class HomeViewModel(
         _productItemSelected.value = ProductDetailContractData(position, productModel)
     }
 
-    private fun insertBookMark(context: Context, model: ProductModel) {
-        compositeDisposable.add(bookmarkRepository.insertBookMark(context, model))
-
-    }
-
-    private fun deleteBookMark(context: Context, model: ProductModel) {
-        compositeDisposable.add(bookmarkRepository.deleteBookMark(context, model))
-    }
-
     fun isBookMark(
         context: Context,
         productModel: ProductModel,
         onResult: (isBookMark: Boolean) -> Unit
     ) {
-        bookmarkRepository.selectExists(
-            context,
-            productModel,
-            result = { exists ->
-                onResult(exists)
-            }
-        )
+        compositeDisposable.add(
+            bookmarkRepository.selectExists(
+                context,
+                productModel,
+                result = { exists ->
+                    onResult(exists)
+                }
+            ))
     }
 
     fun onClickBookMark(context: Context, productModel: ProductModel) {
         isBookMark(context, productModel, onResult = {
             if (it) {
-                deleteBookMark(context, productModel)
+                compositeDisposable.add(
+                    bookmarkRepository.deleteBookMark(
+                        context,
+                        productModel
+                    )
+                )
             } else {
-                insertBookMark(context, productModel)
+                compositeDisposable.add(
+                    bookmarkRepository.insertBookMark(
+                        context,
+                        productModel
+                    )
+                )
             }
         })
+
     }
 }

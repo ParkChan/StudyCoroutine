@@ -21,25 +21,27 @@ class ProductDetailViewModel(
                 onResult(exists)
             }
         ))
+
     }
 
     fun onClickBookMark(context: Context, productModel: ProductModel) {
         isBookMark(context, productModel, onResult = {
             if (it) {
-                deleteBookMark(context, productModel)
+                compositeDisposable.add(
+                    bookmarkRepository.deleteBookMark(
+                        context,
+                        productModel
+                    )
+                )
             } else {
-                insertBookMark(context, productModel)
+                compositeDisposable.add(
+                    bookmarkRepository.insertBookMark(
+                        context,
+                        productModel
+                    )
+                )
             }
+
         })
     }
-
-    private fun deleteBookMark(context: Context, model: ProductModel) {
-        compositeDisposable.add(bookmarkRepository.deleteBookMark(context, model))
-
-    }
-
-    private fun insertBookMark(context: Context, model: ProductModel) {
-        compositeDisposable.add(bookmarkRepository.insertBookMark(context, model))
-    }
-
 }
