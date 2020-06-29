@@ -2,27 +2,27 @@ package com.chan.ui.home
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.chan.R
 import com.chan.common.ListScrollEvent
 import com.chan.common.base.BaseFragment
 import com.chan.common.setRecyclerViewScrollListener
 import com.chan.databinding.FragmentHomeBinding
 import com.chan.network.api.GoodChoiceApi
-import com.chan.ui.bookmark.local.BookmarkDataSource
 import com.chan.ui.bookmark.repository.BookmarkRepository
 import com.chan.ui.detail.ProductDetailActivityContract
 import com.chan.ui.detail.ProductDetailContractData
 import com.chan.ui.home.adapter.ProductListAdapter
 import com.chan.ui.home.model.ProductModel
-import com.chan.ui.home.remote.SearchProductRemoteDataSource
-import com.chan.ui.home.repository.GoodChoiceRepository
+import com.chan.ui.home.repository.SearchProductRepository
 import com.chan.ui.home.viewmodel.HomeViewModel
-import com.chan.utils.showToast
 import com.orhanobut.logger.Logger
+import kotlinx.coroutines.launch
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(
     R.layout.fragment_home
@@ -51,10 +51,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                     return HomeViewModel(
-                        GoodChoiceRepository(
-                            SearchProductRemoteDataSource(GoodChoiceApi.create())
-                        ),
-                        BookmarkRepository(BookmarkDataSource())
+                        SearchProductRepository(GoodChoiceApi.create()),
+                        BookmarkRepository()
                     ) as T
                 }
             }).get(HomeViewModel::class.java)
@@ -71,7 +69,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         binding.homeViewModel?.errorMessage?.observe(
             viewLifecycleOwner,
             Observer {
-                context?.let { showToast(it, getString(R.string.common_toast_msg_network_error)) }
+                context?.let {
+                    Toast.makeText(
+                        it,
+                        getString(R.string.common_toast_msg_network_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             })
         binding.homeViewModel?.productItemSelected?.observe(
             viewLifecycleOwner,
@@ -102,7 +106,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         })
     }
 
-    private fun requestFistPage() {
+    private fun requestFistPage() = lifecycleScope.launch {
         binding.homeViewModel?.requestListData(true)
     }
 

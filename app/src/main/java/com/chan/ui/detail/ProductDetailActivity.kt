@@ -9,7 +9,6 @@ import com.chan.BR
 import com.chan.R
 import com.chan.common.base.BaseActivity
 import com.chan.databinding.ActivityProductDetailBinding
-import com.chan.ui.bookmark.local.BookmarkDataSource
 import com.chan.ui.bookmark.repository.BookmarkRepository
 
 /**
@@ -38,7 +37,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>(
         binding.productDetailViewModel =
             ViewModelProvider(this, object : ViewModelProvider.Factory {
                 override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                    return ProductDetailViewModel(BookmarkRepository(BookmarkDataSource())) as T
+                    return ProductDetailViewModel(BookmarkRepository()) as T
                 }
             }).get(ProductDetailViewModel::class.java)
 
@@ -56,7 +55,6 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>(
     }
 
     override fun onBackPressed() {
-
         intent.getParcelableExtra<ProductDetailContractData>(
             ProductDetailActivityContract.EXTRA_PRODUCT_DATA_KEY
         )?.let {

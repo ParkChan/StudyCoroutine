@@ -3,52 +3,78 @@ package com.chan.ui.bookmark.repository
 import android.content.Context
 import com.chan.ui.bookmark.BookmarkSortType
 import com.chan.ui.bookmark.local.BookmarkDataSource
+import com.chan.ui.bookmark.local.BookmarkDatabase
+import com.chan.ui.bookmark.local.DataBaseResult
 import com.chan.ui.bookmark.model.BookmarkModel
 import com.chan.ui.home.model.ProductModel
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class BookmarkRepository(private val bookmarkDataSource: BookmarkDataSource) {
+class BookmarkRepository : BookmarkDataSource {
 
-    fun selectAll(
+    private val ioDispatcher = Dispatchers.IO
+
+    override suspend fun selectBookmarkList(
         context: Context,
-        sort: BookmarkSortType,
-        onSuccess: (list: List<BookmarkModel>) -> Unit,
-        onFail: (error: String) -> Unit
-    ): Disposable = bookmarkDataSource.selectAll(
-        context,
-        sort,
-        onSuccess,
-        onFail
-    )
+        sort: BookmarkSortType
+    ): DataBaseResult<List<BookmarkModel>> =
+        withContext(ioDispatcher) {
+            return@withContext try {
+                when (sort) {
+                    is BookmarkSortType.RegDateDesc -> {
+                        DataBaseResult.Success(
+                            BookmarkDatabase.getInstance(context).bookmarkDao()
+                                .selectAllRegDateDesc()
+                        )
+                    }
+                    is BookmarkSortType.RegDateAsc -> {
+                        DataBaseResult.Success(
+                            BookmarkDatabase.getInstance(context).bookmarkDao()
+                                .selectAllRegDateAsc()
+                        )
 
-    fun selectExists(
+                    }
+
+                    is BookmarkSortType.ReviewRatingDesc -> {
+                        DataBaseResult.Success(
+                            BookmarkDatabase.getInstance(context).bookmarkDao()
+                                .selectAllReviewDesc()
+                        )
+                    }
+                    is BookmarkSortType.ReviewRatingAsc -> {
+                        DataBaseResult.Success(
+                            BookmarkDatabase.getInstance(context).bookmarkDao().selectAllReviewAsc()
+                        )
+                    }
+                }
+            } catch (e: Exception) {
+                DataBaseResult.Failure(e)
+            }
+        }
+
+    override suspend fun isExists(
         context: Context,
-        productModel: ProductModel,
-        result: (exists: Boolean) -> Unit
-    ): Disposable =
-        bookmarkDataSource.selectExists(context, productModel, result)
-
-
-    fun insertBookMark(context: Context, model: ProductModel): Disposable =
-        bookmarkDataSource.insertBookMark(context, convertToBookMarkModel(model))
-
-    fun deleteBookMark(context: Context, model: ProductModel): Disposable =
-        bookmarkDataSource.deleteBookMark(context, convertToBookMarkModel(model))
-
-    fun deleteBookMark(context: Context, model: BookmarkModel): Disposable =
-        bookmarkDataSource.deleteBookMark(context, model)
-
-    private fun convertToBookMarkModel(model: ProductModel): BookmarkModel {
-        return BookmarkModel(
-            id = model.id,
-            name = model.name,
-            thumbnail = model.thumbnail,
-            imagePath = model.descriptionModel.imagePath,
-            subject = model.descriptionModel.subject,
-            price = model.descriptionModel.price,
-            rate = model.rate,
-            regTimeStamp = System.currentTimeMillis()
-        )
+        productModel: ProductModel
+    ): DataBaseResult<Boolean> = withContext(ioDispatcher) {
+        return@withContext try {
+            val isExists = BookmarkDatabase.getInstance(context)
+                .bookmarkDao().selectProductExists(productModel.id)
+            when (isExists) {
+                1 -> DataBaseResult.Success(true)
+                else -> DataBaseResult.Success(false)
+            }
+        } catch (e: Exception) {
+            DataBaseResult.Failure(e)
+        }
     }
 
+    override suspend fun insertBookMark(context: Context, model: BookmarkModel) =
+        withContext(ioDispatcher) {
+            return@withContext BookmarkDatabase.getInstance(context).bookmarkDao().insert(model)
+        }
+
+    override suspend fun deleteBookMark(context: Context, model: BookmarkModel) =
+        withContext(ioDispatcher) {
+            return@withContext BookmarkDatabase.getInstance(context).bookmarkDao().delete(model)
+        }
 }

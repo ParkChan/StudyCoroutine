@@ -2,13 +2,11 @@ package com.chan.network.api
 
 import com.chan.BuildConfig
 import com.chan.network.BASE_URL
+import com.chan.network.MockInterceptor
 import com.chan.ui.home.model.res.ResProductListModel
-import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -16,9 +14,9 @@ import retrofit2.http.Path
 interface GoodChoiceApi {
 
     @GET("App/json/{page}.json")
-    fun getProductList(
+    suspend fun getProductList(
         @Path("page") page: Int
-    ): Single<Response<ResProductListModel>>
+    ): ResProductListModel
 
     companion object {
         fun create(): GoodChoiceApi {
@@ -31,13 +29,13 @@ interface GoodChoiceApi {
 
             val client = OkHttpClient.Builder()
                 .addInterceptor(logger)
+                .addInterceptor(MockInterceptor())
                 .build()
 
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
                 .create(GoodChoiceApi::class.java)
         }

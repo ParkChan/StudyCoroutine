@@ -3,6 +3,7 @@ package com.chan.ui.bookmark
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -12,12 +13,10 @@ import com.chan.common.base.BaseFragment
 import com.chan.common.viewmodel.BookmarkEventViewModel
 import com.chan.databinding.FragmentBookmarkBinding
 import com.chan.ui.bookmark.adapter.BookmarkAdapter
-import com.chan.ui.bookmark.local.BookmarkDataSource
 import com.chan.ui.bookmark.repository.BookmarkRepository
 import com.chan.ui.bookmark.viewmodel.BookmarkViewModel
 import com.chan.ui.detail.ProductDetailActivityContract
 import com.chan.ui.detail.ProductDetailContractData
-import com.chan.utils.showToast
 import com.orhanobut.logger.Logger
 
 class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(
@@ -55,7 +54,7 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                     return BookmarkViewModel(
-                        BookmarkRepository(BookmarkDataSource())
+                        BookmarkRepository()
                     ) as T
                 }
             }).get(BookmarkViewModel::class.java)
@@ -68,7 +67,7 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(
     }
 
     private fun iniViewModelObserve() {
-
+        val owner = this
         //DB 리스트 조회 성공
         binding.bookmarkViewModel?.bookmarkListData?.observe(
             viewLifecycleOwner,
@@ -89,7 +88,11 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>(
         binding.bookmarkViewModel?.errorMessage?.observe(
             viewLifecycleOwner,
             Observer {
-                context?.let { showToast(it, getString(R.string.common_toast_msg_network_error)) }
+                    Toast.makeText(
+                        owner.context,
+                        getString(R.string.common_toast_msg_network_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
             })
 
         binding.bookmarkViewModel?.sortType?.observe(

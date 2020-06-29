@@ -7,6 +7,10 @@ import com.orhanobut.logger.Logger
 
 class MyApplication: Application() {
 
+    init {
+        INSTANCE = this
+    }
+
     override fun onCreate() {
         super.onCreate()
         Logger.addLogAdapter(object : AndroidLogAdapter() {
@@ -14,5 +18,9 @@ class MyApplication: Application() {
                 return BuildConfig.DEBUG
             }
         })
+    }
+
+    companion object {
+        lateinit var INSTANCE: MyApplication
     }
 }

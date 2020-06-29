@@ -72,19 +72,14 @@ dependencies {
     //retrofit2
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
-
-    //RxJava
-    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
-    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
 
     //Room
     implementation "androidx.room:room-runtime:$roomVersion"
     testImplementation "androidx.room:room-testing:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
-    implementation "androidx.room:room-rxjava2:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
     implementation "androidx.room:room-guava:$roomVersion"
 
     //Glide
@@ -93,6 +88,5 @@ dependencies {
 
     //Coroutine
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
 
 }

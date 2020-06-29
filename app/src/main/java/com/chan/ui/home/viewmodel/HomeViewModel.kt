@@ -6,14 +6,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.chan.common.base.BaseViewModel
 import com.chan.network.NETWORK_ROW_COUNT
+import com.chan.network.NetworkResult
+import com.chan.ui.bookmark.local.DataBaseResult
+import com.chan.ui.bookmark.model.BookmarkModel
 import com.chan.ui.bookmark.repository.BookmarkRepository
 import com.chan.ui.detail.ProductDetailContractData
 import com.chan.ui.home.model.ProductModel
-import com.chan.ui.home.repository.GoodChoiceRepository
+import com.chan.ui.home.repository.SearchProductRepository
+import com.orhanobut.logger.Logger
+import kotlinx.coroutines.async
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val goodChoiceRepository: GoodChoiceRepository,
+    private val searchProductRepository: SearchProductRepository,
     private val bookmarkRepository: BookmarkRepository
 ) : BaseViewModel() {
 
@@ -44,37 +50,40 @@ class HomeViewModel(
         }
     }
 
-    fun requestListData(isFirstPage: Boolean) {
+    fun requestListData(isFirstPage: Boolean) = viewModelScope.launch {
+
+        isProgress = true
+
         if (isFirstPage) {
             initPageInfo()
         }
-        isProgress = true
-        compositeDisposable.add(
-            goodChoiceRepository.requestData(
-                defaultStartPageNumber,
-                onSuccess = {
-                    if (isFirstPage) {
-                        val totalCount = it.data.totalCount
-                        totalPage = if (totalCount / NETWORK_ROW_COUNT > 0) {
-                            (totalCount / NETWORK_ROW_COUNT) + 1
-                        } else {
-                            defaultTotalPageCnt
-                        }
+
+        val resProductListModelDeferred =
+            async { searchProductRepository.getProductList(requestePage) }
+
+        when (val networkResult = resProductListModelDeferred.await()) {
+            is NetworkResult.Success -> {
+                if (isFirstPage) {
+                    val totalCount = networkResult.data.data.totalCount
+                    totalPage = if (totalCount / NETWORK_ROW_COUNT > 0) {
+                        (totalCount / NETWORK_ROW_COUNT) + 1
+                    } else {
+                        defaultTotalPageCnt
                     }
-                    _productListData.value = it.data.productList
-                    requestePage++
-                    isProgress = false
-                },
-                onFail = {
-                    _errorMessage.value = it
-                    isProgress = false
                 }
-            )
-        )
+                _productListData.value = networkResult.data.data.productList
+                requestePage++
+                isProgress = false
+            }
+            is NetworkResult.Failure -> {
+                _errorMessage.value = networkResult.exception.message ?: ""
+                isProgress = false
+            }
+        }
     }
 
     private fun initPageInfo() {
-        requestePage = defaultTotalPageCnt
+        requestePage = defaultStartPageNumber
         totalPage = defaultTotalPageCnt
     }
 
@@ -87,35 +96,45 @@ class HomeViewModel(
         context: Context,
         productModel: ProductModel,
         onResult: (isBookMark: Boolean) -> Unit
-    ) {
-        compositeDisposable.add(
-            bookmarkRepository.selectExists(
-                context,
-                productModel,
-                result = { exists ->
-                    onResult(exists)
-                }
-            ))
+    ) = viewModelScope.launch {
+        val bookmarkReulstReffered = async {
+            bookmarkRepository.isExists(context, productModel)
+        }
+
+        when (val dbResult = bookmarkReulstReffered.await()) {
+            is DataBaseResult.Success -> onResult(dbResult.data)
+            is DataBaseResult.Failure -> Logger.d(dbResult.exception.message ?: "")
+        }
     }
 
     fun onClickBookMark(context: Context, productModel: ProductModel) {
         isBookMark(context, productModel, onResult = {
-            if (it) {
-                compositeDisposable.add(
+            viewModelScope.launch {
+                if (it) {
                     bookmarkRepository.deleteBookMark(
                         context,
-                        productModel
+                        convertToBookMarkModel(productModel)
                     )
-                )
-            } else {
-                compositeDisposable.add(
+                } else {
                     bookmarkRepository.insertBookMark(
                         context,
-                        productModel
+                        convertToBookMarkModel(productModel)
                     )
-                )
+                }
             }
         })
+    }
 
+    private fun convertToBookMarkModel(model: ProductModel): BookmarkModel {
+        return BookmarkModel(
+            id = model.id,
+            name = model.name,
+            thumbnail = model.thumbnail,
+            imagePath = model.descriptionModel.imagePath,
+            subject = model.descriptionModel.subject,
+            price = model.descriptionModel.price,
+            rate = model.rate,
+            regTimeStamp = System.currentTimeMillis()
+        )
     }
 }
