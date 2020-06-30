@@ -1,33 +1,33 @@
 # StudyCoroutine
 
-# 적용 기술
+## 적용 기술
 ### JetPack
 ```JetPack
-- DataBinding
-- LiveData
-- Room
-- ViewModel
-- ViewPager2
-- ActivityResultLauncher
-- Hilt
+* DataBinding
+* LiveData
+* Room
+* ViewModel
+* ViewPager2
+* ActivityResultLauncher
+* Hilt
 ```
 ### Network
 ```Network
-- Retrofit
+* Retrofit
 ```
 
 ### Asynchronous
 ```Asynchronous
-- Coroutine
+* Coroutine
 ```
 
 ### Etc
 ```Etc
-- MockInterceptor
+* MockInterceptor
 ```
 
 ### 구현 내용
-```desc
+```Desc
 1. 화면 구성
  - 2개의 리스트와 상세 화면으로 구성
 
