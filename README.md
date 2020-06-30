@@ -1,7 +1,7 @@
 # StudyCoroutine
 
-### 적용 기술
-## JetPack
+#적용 기술
+### JetPack
 - DataBinding
 - LiveData
 - Room
@@ -10,13 +10,13 @@
 - ActivityResultLauncher
 - Hilt
 
-## Network
+### Network
 - Retrofit
 
-## Asynchronous
+### Asynchronous
 - Coroutine
 
-## Etc
+### Etc
 - MockInterceptor
 
 ### 구현 내용
