@@ -2,7 +2,7 @@
 
 ## 적용 기술
 ### JetPack
-```JetPack
+
 * DataBinding
 * LiveData
 * Room
@@ -10,7 +10,7 @@
 * ViewPager2
 * ActivityResultLauncher
 * Hilt
-```
+
 ### Network
 ```Network
 * Retrofit
