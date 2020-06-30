@@ -1,7 +1,8 @@
 # StudyCoroutine
 
-#적용 기술
+# 적용 기술
 ### JetPack
+```JetPack
 - DataBinding
 - LiveData
 - Room
@@ -9,18 +10,24 @@
 - ViewPager2
 - ActivityResultLauncher
 - Hilt
-
+```
 ### Network
+```Network
 - Retrofit
+```
 
 ### Asynchronous
+```Asynchronous
 - Coroutine
+```
 
 ### Etc
+```Etc
 - MockInterceptor
+```
 
 ### 구현 내용
-
+```desc
 1. 화면 구성
  - 2개의 리스트와 상세 화면으로 구성
 
@@ -40,3 +47,4 @@
 <상세 화면>
  - 원본 이미지, 제목, 상세정보들을 화면에 표기
  - 즐겨찾기 토글 기능
+```
