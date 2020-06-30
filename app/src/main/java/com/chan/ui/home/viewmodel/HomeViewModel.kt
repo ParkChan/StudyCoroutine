@@ -1,6 +1,7 @@
 package com.chan.ui.home.viewmodel
 
 import android.content.Context
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -18,7 +19,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-class HomeViewModel(
+class HomeViewModel @ViewModelInject constructor(
     private val searchProductRepository: SearchProductRepository,
     private val bookmarkRepository: BookmarkRepository
 ) : BaseViewModel() {

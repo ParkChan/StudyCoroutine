@@ -1,8 +1,8 @@
 package com.chan
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.chan.common.ViewPagerAdapter
 import com.chan.common.base.BaseActivity
@@ -12,10 +12,14 @@ import com.chan.ui.bookmark.BookmarkFragment
 import com.chan.ui.home.HomeFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.orhanobut.logger.Logger
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(
     R.layout.activity_main
 ) {
+
+    private val bookmarkEventViewModel by viewModels<BookmarkEventViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +36,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(
             tab.text = tabTitleList[position]
         }.attach()
 
-        binding.bookmarkEventViewModel =
-            ViewModelProvider(this).get(BookmarkEventViewModel::class.java)
+        binding.bookmarkEventViewModel = bookmarkEventViewModel
 
         binding.viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {

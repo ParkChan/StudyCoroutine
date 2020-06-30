@@ -1,6 +1,7 @@
 package com.chan.ui.bookmark.viewmodel
 
 import android.content.Context
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -16,7 +17,7 @@ import com.orhanobut.logger.Logger
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class BookmarkViewModel(
+class BookmarkViewModel @ViewModelInject constructor(
     private val bookmarkRepository: BookmarkRepository
 ) : BaseViewModel() {
 

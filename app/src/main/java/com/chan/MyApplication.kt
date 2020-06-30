@@ -2,10 +2,15 @@ package com.chan
 
 import android.app.Application
 import com.orhanobut.logger.AndroidLogAdapter
-import com.orhanobut.logger.BuildConfig
 import com.orhanobut.logger.Logger
+import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
+@HiltAndroidApp
 class MyApplication: Application() {
+
+    @Inject
+    lateinit var androidLogAdapter: AndroidLogAdapter
 
     init {
         INSTANCE = this
@@ -13,11 +18,7 @@ class MyApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Logger.addLogAdapter(object : AndroidLogAdapter() {
-            override fun isLoggable(priority: Int, tag: String?): Boolean {
-                return BuildConfig.DEBUG
-            }
-        })
+        Logger.addLogAdapter(androidLogAdapter)
     }
 
     companion object {

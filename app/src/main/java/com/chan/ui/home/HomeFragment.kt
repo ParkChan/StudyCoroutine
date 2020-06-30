@@ -4,29 +4,29 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.chan.R
 import com.chan.common.ListScrollEvent
 import com.chan.common.base.BaseFragment
 import com.chan.common.setRecyclerViewScrollListener
 import com.chan.databinding.FragmentHomeBinding
-import com.chan.network.api.GoodChoiceApi
-import com.chan.ui.bookmark.repository.BookmarkRepository
 import com.chan.ui.detail.ProductDetailActivityContract
 import com.chan.ui.detail.ProductDetailContractData
 import com.chan.ui.home.adapter.ProductListAdapter
 import com.chan.ui.home.model.ProductModel
-import com.chan.ui.home.repository.SearchProductRepository
 import com.chan.ui.home.viewmodel.HomeViewModel
 import com.orhanobut.logger.Logger
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(
     R.layout.fragment_home
 ) {
+
+    private val homeViewModel by viewModels<HomeViewModel>()
 
     private val activityResultLauncher: ActivityResultLauncher<ProductDetailContractData> =
         registerForActivityResult(
@@ -44,18 +44,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
         requestFistPage()
     }
 
-    @Suppress("UNCHECKED_CAST")
     private fun initViewModel() {
-        binding.homeViewModel = ViewModelProvider(
-            this,
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                    return HomeViewModel(
-                        SearchProductRepository(GoodChoiceApi.create()),
-                        BookmarkRepository()
-                    ) as T
-                }
-            }).get(HomeViewModel::class.java)
+        binding.homeViewModel = homeViewModel
 
         binding.rvProduct.adapter = ProductListAdapter(binding.homeViewModel as HomeViewModel)
     }

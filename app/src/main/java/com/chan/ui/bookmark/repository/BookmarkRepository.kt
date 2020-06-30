@@ -9,8 +9,9 @@ import com.chan.ui.bookmark.model.BookmarkModel
 import com.chan.ui.home.model.ProductModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class BookmarkRepository : BookmarkDataSource {
+class BookmarkRepository @Inject constructor() : BookmarkDataSource {
 
     private val ioDispatcher = Dispatchers.IO
 

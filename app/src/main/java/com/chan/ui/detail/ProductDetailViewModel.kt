@@ -1,6 +1,7 @@
 package com.chan.ui.detail
 
 import android.content.Context
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
 import com.chan.common.base.BaseViewModel
 import com.chan.ui.bookmark.local.DataBaseResult
@@ -11,7 +12,7 @@ import com.orhanobut.logger.Logger
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class ProductDetailViewModel(
+class ProductDetailViewModel @ViewModelInject constructor(
     private val bookmarkRepository: BookmarkRepository
 ) : BaseViewModel() {
 

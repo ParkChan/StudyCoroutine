@@ -1,4 +1,5 @@
 # StudyCoroutine
+리스트를 조회/상세화면 조회/즐겨찾기
 
 ## 적용 기술
 ### JetPack
@@ -16,7 +17,7 @@
 * Retrofit
 
 
-### Asynchronous
+### Async
 
 * Coroutine
 
@@ -24,6 +25,7 @@
 ### Etc
 
 * MockInterceptor
+* Glide
 
 
 ### 구현 내용

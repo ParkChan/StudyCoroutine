@@ -6,8 +6,9 @@ import com.chan.ui.home.model.res.ResProductListModel
 import com.chan.ui.home.remote.SearchProductRemoteDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class SearchProductRepository(
+class SearchProductRepository @Inject constructor(
     private val goodChoiceApi: GoodChoiceApi
 ) : SearchProductRemoteDataSource {
 

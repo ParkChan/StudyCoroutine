@@ -3,13 +3,11 @@ package com.chan.ui.detail
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import com.chan.BR
 import com.chan.R
 import com.chan.common.base.BaseActivity
 import com.chan.databinding.ActivityProductDetailBinding
-import com.chan.ui.bookmark.repository.BookmarkRepository
 
 /**
  * 상품 상세화면
@@ -17,6 +15,9 @@ import com.chan.ui.bookmark.repository.BookmarkRepository
 class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>(
     R.layout.activity_product_detail
 ) {
+
+    private val productDetailViewModel by viewModels<ProductDetailViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -31,16 +32,8 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>(
 
     }
 
-    @Suppress("UNCHECKED_CAST")
     private fun initViewModel() {
-
-        binding.productDetailViewModel =
-            ViewModelProvider(this, object : ViewModelProvider.Factory {
-                override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                    return ProductDetailViewModel(BookmarkRepository()) as T
-                }
-            }).get(ProductDetailViewModel::class.java)
-
+        binding.productDetailViewModel = productDetailViewModel
     }
 
     private fun initLayoutComponent() {
