@@ -46,10 +46,10 @@ class BookmarkViewModel @ViewModelInject constructor(
 
     fun selectAll(context: Context, sortType: BookmarkSortType) = viewModelScope.launch {
 
-        val resBookmarkDeffered =
+        val bookmarkResult =
             async { bookmarkRepository.selectBookmarkList(context, sortType) }
 
-        when (val dbResult = resBookmarkDeffered.await()) {
+        when (val dbResult = bookmarkResult.await()) {
             is DataBaseResult.Success -> {
                 lastRequestSortType = sortType
                 _bookmarkListData.postValue(dbResult.data)

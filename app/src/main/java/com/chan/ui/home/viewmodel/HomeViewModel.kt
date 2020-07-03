@@ -98,11 +98,11 @@ class HomeViewModel @ViewModelInject constructor(
         productModel: ProductModel,
         onResult: (isBookMark: Boolean) -> Unit
     ) = viewModelScope.launch {
-        val bookmarkReulstReffered = async {
+        val bookmarkResult = async {
             bookmarkRepository.isExists(context, productModel)
         }
 
-        when (val dbResult = bookmarkReulstReffered.await()) {
+        when (val dbResult = bookmarkResult.await()) {
             is DataBaseResult.Success -> onResult(dbResult.data)
             is DataBaseResult.Failure -> Logger.d(dbResult.exception.message ?: "")
         }
