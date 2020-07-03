@@ -8,10 +8,12 @@ import com.chan.BR
 import com.chan.R
 import com.chan.common.base.BaseActivity
 import com.chan.databinding.ActivityProductDetailBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * 상품 상세화면
  */
+@AndroidEntryPoint
 class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>(
     R.layout.activity_product_detail
 ) {
