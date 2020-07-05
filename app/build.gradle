@@ -45,15 +45,15 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation JetBrain.JDK
 
-    implementation AndroidDx.APPCOMPAT
+    implementation AndroidDxDependencies.APPCOMPAT
 
-    implementation AndroidDx.CORE_KTX
-    implementation AndroidDx.LIFECYCLE_VIEW_MODEL
-    implementation AndroidDx.LIFECYCLE_RUNTIME
-    implementation AndroidDx.LIFECYCLE_LIVEDATA
-    implementation AndroidDx.LIFECYCLE_EXT
+    implementation AndroidDxDependencies.CORE_KTX
+    implementation AndroidDxDependencies.LIFECYCLE_VIEW_MODEL
+    implementation AndroidDxDependencies.LIFECYCLE_RUNTIME
+    implementation AndroidDxDependencies.LIFECYCLE_LIVEDATA
+    implementation AndroidDxDependencies.LIFECYCLE_EXT
 
-    implementation AndroidDx.CONSTRAINT_LAYOUT
+    implementation AndroidDxDependencies.CONSTRAINT_LAYOUT
 
     implementation Google.MATERIAL
 
@@ -61,20 +61,20 @@ dependencies {
     androidTestImplementation TestDependencies.EXT_JUNIT
     androidTestImplementation TestDependencies.ESPRESSO
 
-    implementation AndroidDx.ACTIVITY_KTX
-    implementation AndroidDx.FRAGMENT_KTX
+    implementation AndroidDxDependencies.ACTIVITY_KTX
+    implementation AndroidDxDependencies.FRAGMENT_KTX
 
-    implementation AndroidDx.NAVIGATION_FRAGMENT
-    implementation AndroidDx.NAVIGATION_UI
-    implementation AndroidDx.NAVIGATION_FRAGMENT_KTX
-    implementation AndroidDx.NAVIGATION_UI_KTX
+    implementation AndroidDxDependencies.NAVIGATION_FRAGMENT
+    implementation AndroidDxDependencies.NAVIGATION_UI
+    implementation AndroidDxDependencies.NAVIGATION_FRAGMENT_KTX
+    implementation AndroidDxDependencies.NAVIGATION_UI_KTX
 
-    implementation AndroidDx.ROOM_RUNTIME
-    testImplementation AndroidDx.ROOM_TESTING
-    kapt AndroidDx.ROOM_COMPILER
-    annotationProcessor AndroidDx.ROOM_COMPILER
-    implementation AndroidDx.ROOM_KTX
-    implementation AndroidDx.ROOM_GUAVA
+    implementation AndroidDxDependencies.ROOM_RUNTIME
+    testImplementation AndroidDxDependencies.ROOM_TESTING
+    kapt AndroidDxDependencies.ROOM_COMPILER
+    annotationProcessor AndroidDxDependencies.ROOM_COMPILER
+    implementation AndroidDxDependencies.ROOM_KTX
+    implementation AndroidDxDependencies.ROOM_GUAVA
 
     implementation Dependencies.LOGGER
 
@@ -88,8 +88,8 @@ dependencies {
     kapt Dependencies.HILT_ANDROID_COMPILER
     kapt Dependencies.HILT_COMPILER
 
-    implementation Retrofit.RETROFIT
-    implementation Retrofit.GSON
-    implementation Retrofit.LOGGING
+    implementation NetworkDependencies.RETROFIT
+    implementation NetworkDependencies.GSON
+    implementation NetworkDependencies.LOGGING
 
 }

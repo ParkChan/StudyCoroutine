@@ -1,7 +1,6 @@
 package com.chan.di
 
 import com.chan.BuildConfig
-import com.chan.network.BASE_URL
 import com.chan.network.MockInterceptor
 import com.chan.network.api.GoodChoiceApi
 import dagger.Module
@@ -18,41 +17,46 @@ import javax.inject.Singleton
 @InstallIn(ApplicationComponent::class)
 class RetrofitModule {
 
+
     @Provides
     @Singleton
-    fun provideHttpLogging(): HttpLoggingInterceptor {
-        val logger = HttpLoggingInterceptor()
-        logger.level = if (BuildConfig.DEBUG) {
+    fun provideHttpLogging() = HttpLoggingInterceptor().apply {
+        level = if (BuildConfig.DEBUG) {
             HttpLoggingInterceptor.Level.BODY
         } else {
             HttpLoggingInterceptor.Level.NONE
         }
-        return logger
     }
 
     @Provides
     @Singleton
-    fun provideMockInterceptor(): MockInterceptor {
-        return MockInterceptor()
-    }
+    fun provideMockInterceptor() = MockInterceptor()
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(provideHttpLogging())
-            .addInterceptor(provideMockInterceptor())
-            .build()
-    }
+    fun provideOkHttpClient(
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        mockInterceptor: MockInterceptor
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(httpLoggingInterceptor)
+        .addInterceptor(mockInterceptor)
+        .build()
 
     @Provides
     @Singleton
-    fun provideRetrofit(): GoodChoiceApi {
-        return Retrofit.Builder()
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(provideOkHttpClient())
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(GoodChoiceApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideGoodChoiceService(retrofit: Retrofit) : GoodChoiceApi =
+        retrofit.create(GoodChoiceApi::class.java)
+
+    companion object {
+        private const val BASE_URL = "https://www.gccompany.co.kr/"
     }
 }

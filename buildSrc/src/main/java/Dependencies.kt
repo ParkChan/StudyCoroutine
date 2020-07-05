@@ -31,7 +31,7 @@ object TestDependencies {
     const val ESPRESSO = "androidx.test.espresso:espresso-core:3.2.0"
 }
 
-object AndroidDx {
+object AndroidDxDependencies {
     private const val LIFECYCLE_VERSION = "2.2.0"
     private const val NAVIGATION_VERSION = "2.3.0"
     private const val ROOM_VERSION = "2.2.5"
@@ -64,7 +64,6 @@ object AndroidDx {
     const val ROOM_KTX = "androidx.room:room-ktx:$ROOM_VERSION"
     const val ROOM_GUAVA = "androidx.room:room-guava:$ROOM_VERSION"
 
-
 }
 
 
@@ -96,11 +95,16 @@ object Dependencies {
 
 }
 
-object Retrofit {
+object NetworkDependencies {
     private const val RETROFIT_VERSION = "2.9.0"
-    private const val OKHTTP_VERSION = "4.7.2"
+    private const val MOSHI_VERSION = "1.9.2"
 
     const val RETROFIT = "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     const val GSON = "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
-    const val LOGGING = "com.squareup.okhttp3:logging-interceptor:$OKHTTP_VERSION"
+    const val CONVERTER_MOSHI = "com.squareup.retrofit2:converter-moshi:$RETROFIT_VERSION"
+    const val LOGGING = "com.squareup.okhttp3:logging-interceptor:4.7.2"
+
+    const val MOSHI = "com.squareup.moshi:moshi:$MOSHI_VERSION"
+    const val MOSHI_KOTLIN = "com.squareup.moshi:moshi-kotlin:$MOSHI_VERSION"
+    const val MOSHI_KOTLIN_CODEGEN = "com.squareup.moshi:moshi-kotlin-codegen:$MOSHI_VERSION"
 }
