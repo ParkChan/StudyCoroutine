@@ -51,7 +51,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(
     }
 
     private fun iniViewModelObserve() {
-        binding.homeViewModel?.productListData?.observe(
+        binding.homeViewModel?.productListModel?.observe(
             viewLifecycleOwner,
             Observer {
                 Logger.d("homeViewModel observe listData $it")

@@ -1,11 +1,11 @@
-package com.chan.ui.home.remote
+package com.chan.ui.home.domain
 
 import com.chan.network.NetworkResult
-import com.chan.ui.home.model.res.ResProductListModel
+import com.chan.ui.home.domain.entity.res.MainResponse
 
 interface SearchProductRemoteDataSource {
 
     suspend fun getProductList(
         page: Int
-    ): NetworkResult<ResProductListModel>
+    ): NetworkResult<MainResponse>
 }

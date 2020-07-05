@@ -1,9 +1,8 @@
-package com.chan.ui.home.repository
+package com.chan.ui.home.domain
 
 import com.chan.network.NetworkResult
 import com.chan.network.api.GoodChoiceApi
-import com.chan.ui.home.model.res.ResProductListModel
-import com.chan.ui.home.remote.SearchProductRemoteDataSource
+import com.chan.ui.home.domain.entity.res.MainResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -14,7 +13,7 @@ class SearchProductRepository @Inject constructor(
 
     private val ioDispatcher = Dispatchers.IO
 
-    override suspend fun getProductList(page: Int): NetworkResult<ResProductListModel> =
+    override suspend fun getProductList(page: Int): NetworkResult<MainResponse> =
         withContext(ioDispatcher) {
             return@withContext try {
                 NetworkResult.Success(
@@ -24,6 +23,4 @@ class SearchProductRepository @Inject constructor(
                 NetworkResult.Failure(e)
             }
         }
-
-
 }

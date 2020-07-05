@@ -89,7 +89,12 @@ dependencies {
     kapt Dependencies.HILT_COMPILER
 
     implementation NetworkDependencies.RETROFIT
-    implementation NetworkDependencies.GSON
     implementation NetworkDependencies.LOGGING
+    implementation NetworkDependencies.MOSHI_KOTLIN
+    implementation NetworkDependencies.MOSHI
+    implementation NetworkDependencies.CONVERTER_MOSHI
+    kapt NetworkDependencies.MOSHI_KOTLIN_CODEGEN
+
+
 
 }

@@ -12,8 +12,9 @@ import com.chan.ui.bookmark.local.DataBaseResult
 import com.chan.ui.bookmark.model.BookmarkModel
 import com.chan.ui.bookmark.repository.BookmarkRepository
 import com.chan.ui.detail.ProductDetailContractData
+import com.chan.ui.home.domain.SearchProductRepository
+import com.chan.ui.home.domain.entity.res.mapToModel
 import com.chan.ui.home.model.ProductModel
-import com.chan.ui.home.repository.SearchProductRepository
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.async
 import kotlinx.coroutines.isActive
@@ -32,7 +33,7 @@ class HomeViewModel @ViewModelInject constructor(
     private var isProgress = false
 
     private val _productListData = MutableLiveData<List<ProductModel>>()
-    val productListData: LiveData<List<ProductModel>> get() = _productListData
+    val productListModel: LiveData<List<ProductModel>> get() = _productListData
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
@@ -64,17 +65,21 @@ class HomeViewModel @ViewModelInject constructor(
 
         when (val networkResult = resProductListModelDeferred.await()) {
             is NetworkResult.Success -> {
-                if (isFirstPage) {
-                    val totalCount = networkResult.data.data.totalCount
-                    totalPage = if (totalCount / NETWORK_ROW_COUNT > 0) {
-                        (totalCount / NETWORK_ROW_COUNT) + 1
-                    } else {
-                        defaultTotalPageCnt
+
+                networkResult.data.mapToModel().run {
+                    if (isFirstPage) {
+                        val totalCount = data.totalCount
+                        totalPage = if (totalCount / NETWORK_ROW_COUNT > 0) {
+                            (totalCount / NETWORK_ROW_COUNT) + 1
+                        } else {
+                            defaultTotalPageCnt
+                        }
                     }
+                    _productListData.value = data.productList
+                    requestePage++
+                    isProgress = false
                 }
-                _productListData.value = networkResult.data.data.productList
-                requestePage++
-                isProgress = false
+
             }
             is NetworkResult.Failure -> {
                 _errorMessage.value = networkResult.exception.message ?: ""
