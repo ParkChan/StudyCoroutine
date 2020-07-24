@@ -1,7 +1,7 @@
-package com.chan.ui.home.domain
+package com.chan.data
 
+import com.chan.data.response.MainResponse
 import com.chan.network.NetworkResult
-import com.chan.ui.home.domain.entity.res.MainResponse
 
 interface SearchProductRemoteDataSource {
 

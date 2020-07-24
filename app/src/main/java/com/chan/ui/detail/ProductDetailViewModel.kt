@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
 import com.chan.common.base.BaseViewModel
-import com.chan.ui.bookmark.local.DataBaseResult
+import com.chan.db.DataBaseResult
 import com.chan.ui.bookmark.model.BookmarkModel
 import com.chan.ui.bookmark.repository.BookmarkRepository
 import com.chan.ui.home.model.ProductModel

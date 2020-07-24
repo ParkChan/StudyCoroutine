@@ -1,4 +1,4 @@
-package com.chan.ui.bookmark.local
+package com.chan.db
 
 sealed class DataBaseResult<out R> {
     data class Success<out T>(val data: T) : DataBaseResult<T>()

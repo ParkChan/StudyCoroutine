@@ -1,7 +1,5 @@
-package com.chan.ui.home.domain.entity.res
+package com.chan.data.response
 
-import com.chan.ui.home.domain.entity.ProductListResponse
-import com.chan.ui.home.domain.entity.mapToModel
 import com.chan.ui.home.model.MainModel
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

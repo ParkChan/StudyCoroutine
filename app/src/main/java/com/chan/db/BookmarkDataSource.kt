@@ -1,4 +1,4 @@
-package com.chan.ui.bookmark.local
+package com.chan.db
 
 import android.content.Context
 import com.chan.ui.bookmark.BookmarkSortType

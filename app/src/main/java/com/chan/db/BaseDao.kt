@@ -1,4 +1,4 @@
-package com.chan.ui.bookmark.local
+package com.chan.db
 
 import androidx.room.Delete
 import androidx.room.Insert

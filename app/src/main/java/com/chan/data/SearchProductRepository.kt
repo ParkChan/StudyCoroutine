@@ -1,8 +1,8 @@
-package com.chan.ui.home.domain
+package com.chan.data
 
+import com.chan.data.response.MainResponse
 import com.chan.network.NetworkResult
 import com.chan.network.api.GoodChoiceApi
-import com.chan.ui.home.domain.entity.res.MainResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.chan.ui.home.domain.entity
+package com.chan.data.response
 
 import com.chan.ui.home.model.DescriptionModel
 import com.squareup.moshi.Json

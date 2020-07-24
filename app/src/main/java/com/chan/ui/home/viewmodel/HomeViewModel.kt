@@ -6,14 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.chan.common.base.BaseViewModel
+import com.chan.data.SearchProductRepository
+import com.chan.data.response.mapToModel
+import com.chan.db.DataBaseResult
 import com.chan.network.NETWORK_ROW_COUNT
 import com.chan.network.NetworkResult
-import com.chan.ui.bookmark.local.DataBaseResult
 import com.chan.ui.bookmark.model.BookmarkModel
 import com.chan.ui.bookmark.repository.BookmarkRepository
 import com.chan.ui.detail.ProductDetailContractData
-import com.chan.ui.home.domain.SearchProductRepository
-import com.chan.ui.home.domain.entity.res.mapToModel
 import com.chan.ui.home.model.ProductModel
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.async

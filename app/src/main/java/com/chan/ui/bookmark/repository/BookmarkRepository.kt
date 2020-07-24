@@ -1,10 +1,10 @@
 package com.chan.ui.bookmark.repository
 
 import android.content.Context
+import com.chan.db.BookmarkDataSource
+import com.chan.db.BookmarkDatabase
+import com.chan.db.DataBaseResult
 import com.chan.ui.bookmark.BookmarkSortType
-import com.chan.ui.bookmark.local.BookmarkDataSource
-import com.chan.ui.bookmark.local.BookmarkDatabase
-import com.chan.ui.bookmark.local.DataBaseResult
 import com.chan.ui.bookmark.model.BookmarkModel
 import com.chan.ui.home.model.ProductModel
 import kotlinx.coroutines.Dispatchers

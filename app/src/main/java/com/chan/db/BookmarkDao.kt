@@ -1,4 +1,4 @@
-package com.chan.ui.bookmark.local
+package com.chan.db
 
 import androidx.room.Dao
 import androidx.room.Query
